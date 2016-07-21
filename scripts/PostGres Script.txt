@@ -27,7 +27,7 @@ CREATE TABLE email_zlid       (filename TEXT,
 CREATE TABLE email_body       (filename TEXT, 
                                email_body TEXT);
 ---
---- zipcode_phone.py & geocode.py -----------------------------------------------
+--- zipcode_phone.py & zipcode_long_lat.py(Python 2.7 required/virtual) ---------
 ---
 CREATE TABLE zipcode_filename (filename TEXT,
                                zipcode TEXT, 
@@ -37,7 +37,7 @@ CREATE TABLE zipcode_filename (filename TEXT,
 CREATE TABLE phone_filename   (filename TEXT,
                                phone TEXT);
 ---
---- wordcount.py & hdfs_upload.py -----------------------------------------------
+--- wordcount.py & wordcount_textfile_combine.py --------------------------------
 ---
 CREATE TABLE word_count       (word TEXT, 
                                count int);
