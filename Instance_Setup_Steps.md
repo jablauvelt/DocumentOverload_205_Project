@@ -7,5 +7,4 @@ In EC2:
 - Search: enron -> EDRM Enron DS v2 and v1
 - Click Create Volume
 - Left Sidebar: Elastic Block Store -> Volumes
-- 
 
