@@ -1,8 +1,6 @@
-# DocumentOverload_205_Project
+# Dealing with Document Overload
 
-Dealing with Document Overload
-
-Final Project for MIDS 205 - Storing and Retrieving Data
+## Final Project for MIDS 205 - Storing and Retrieving Data
 
 - Jason Blauvelt
 - Geoffrey Link
