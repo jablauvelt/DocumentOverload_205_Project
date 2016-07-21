@@ -1,0 +1,5 @@
+---
+CREATE TABLE zipcode_filename (zipcode TEXT, filename TEXT, longitude TEXT, latitude TEXT);
+---
+CREATE TABLE phone_filename (phone TEXT, filename TEXT);
+---
