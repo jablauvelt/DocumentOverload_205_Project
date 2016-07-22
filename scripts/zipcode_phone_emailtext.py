@@ -127,30 +127,31 @@ conn.commit()
 
 paths = (
 	'file:/enron_output/text_022/*.txt',
-	'file:/enron_output/text_021/*.txt',
-	'file:/enron_output/text_020/*.txt',
-	'file:/enron_output/text_019/*.txt',
-	'file:/enron_output/text_018/*.txt',
-	'file:/enron_output/text_017/*.txt',
-	'file:/enron_output/text_016/*.txt',
-	'file:/enron_output/text_015/*.txt',
-	'file:/enron_output/text_014/*.txt',
-	'file:/enron_output/text_013/*.txt',
-	'file:/enron_output/text_012/*.txt',
-	'file:/enron_output/text_011/*.txt',
-	'file:/enron_output/text_010/*.txt',
-	'file:/enron_output/text_009/*.txt',
-	'file:/enron_output/text_008/*.txt',
-	'file:/enron_output/text_007/*.txt',
-	'file:/enron_output/text_006/*.txt',
-	'file:/enron_output/text_005/*.txt',
-	'file:/enron_output/text_004/*.txt',
-	'file:/enron_output/text_003/*.txt',
-	'file:/enron_output/text_002/*.txt',
-	'file:/enron_output/text_001/*.txt'
+	'file:/enron_output/text_021/*.txt'
+#	'file:/enron_output/text_020/*.txt',
+#	'file:/enron_output/text_019/*.txt',
+#	'file:/enron_output/text_018/*.txt',
+#	'file:/enron_output/text_017/*.txt',
+#	'file:/enron_output/text_016/*.txt',
+#	'file:/enron_output/text_015/*.txt',
+#	'file:/enron_output/text_014/*.txt',
+#	'file:/enron_output/text_013/*.txt',
+#	'file:/enron_output/text_012/*.txt',
+#	'file:/enron_output/text_011/*.txt',
+#	'file:/enron_output/text_010/*.txt',
+#	'file:/enron_output/text_009/*.txt',
+#	'file:/enron_output/text_008/*.txt',
+#	'file:/enron_output/text_007/*.txt',
+#	'file:/enron_output/text_006/*.txt',
+#	'file:/enron_output/text_005/*.txt',
+#	'file:/enron_output/text_004/*.txt',
+#	'file:/enron_output/text_003/*.txt',
+#	'file:/enron_output/text_002/*.txt',
+#	'file:/enron_output/text_001/*.txt'
 	)
 
 for p in paths:
+	print("Now Processing:", p)
 	getsome(p)
 
 conn.close()
