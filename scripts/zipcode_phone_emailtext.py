@@ -1,35 +1,17 @@
 # /home/w205/spark15/bin/spark-submit /enron_output/zipcode_phone_emailtext.py
 
 from __future__ import print_function
-
 import sys
 import psycopg2
 import re
 import email
-
 from pyspark import SparkContext
 
-conn = psycopg2.connect(database="finalproject", user="postgres", password="pass", host="localhost", port="5432")
-cur = conn.cursor()
-
-cur.execute("delete from zipcode_filename")
-cur.execute("delete from phone_filename")
-cur.execute("delete from email_from")
-cur.execute("delete from email_to")
-cur.execute("delete from email_cc")
-cur.execute("delete from email_subject")
-cur.execute("delete from email_date")
-cur.execute("delete from email_sdoc")
-cur.execute("delete from email_zlid")
-cur.execute("delete from email_body")
-conn.commit()
-
-if __name__ == "__main__":
+def getsome(path):
 
 	sc = SparkContext(appName="EnronEmailTextFiles")
 
-#	files = sc.wholeTextFiles("file:///user/w205/*.txt")
-	files = sc.wholeTextFiles("file:/enron_output/text_000/3.596297.JQDUBUSKERIAFDYWP5DBFG42C5TM1CNIB.txt")
+	files = sc.wholeTextFiles(path)
 
 	file_output = files.collect()
 
@@ -52,7 +34,7 @@ if __name__ == "__main__":
 
 			file = open(filename[filename.find('/'):])
 			message = email.message_from_file(file)
-			print(message.keys())
+			print(filename[filename.find('/'):], message.keys())
 
 			for key in message.keys():
 
@@ -126,5 +108,49 @@ if __name__ == "__main__":
 			print(sys.exc_info()[0])
 			conn.rollback()
 
-sc.stop()
+	sc.stop()
+
+conn = psycopg2.connect(database="finalproject", user="postgres", password="pass", host="localhost", port="5432")
+cur = conn.cursor()
+
+cur.execute("delete from zipcode_filename")
+cur.execute("delete from phone_filename")
+cur.execute("delete from email_from")
+cur.execute("delete from email_to")
+cur.execute("delete from email_cc")
+cur.execute("delete from email_subject")
+cur.execute("delete from email_date")
+cur.execute("delete from email_sdoc")
+cur.execute("delete from email_zlid")
+cur.execute("delete from email_body")
+conn.commit()
+
+paths = (
+	'file:/enron_output/text_022/*.txt',
+	'file:/enron_output/text_021/*.txt',
+	'file:/enron_output/text_020/*.txt',
+	'file:/enron_output/text_019/*.txt',
+	'file:/enron_output/text_018/*.txt',
+	'file:/enron_output/text_017/*.txt',
+	'file:/enron_output/text_016/*.txt',
+	'file:/enron_output/text_015/*.txt',
+	'file:/enron_output/text_014/*.txt',
+	'file:/enron_output/text_013/*.txt',
+	'file:/enron_output/text_012/*.txt',
+	'file:/enron_output/text_011/*.txt',
+	'file:/enron_output/text_010/*.txt',
+	'file:/enron_output/text_009/*.txt',
+	'file:/enron_output/text_008/*.txt',
+	'file:/enron_output/text_007/*.txt',
+	'file:/enron_output/text_006/*.txt',
+	'file:/enron_output/text_005/*.txt',
+	'file:/enron_output/text_004/*.txt',
+	'file:/enron_output/text_003/*.txt',
+	'file:/enron_output/text_002/*.txt',
+	'file:/enron_output/text_001/*.txt'
+	)
+
+for p in paths:
+	getsome(p)
+
 conn.close()
