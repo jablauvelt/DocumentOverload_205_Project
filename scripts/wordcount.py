@@ -1,4 +1,6 @@
 # /home/w205/spark15/bin/spark-submit /enron_output/wordcount.py
+# Spark piece requires approximately 40 minutes of execution time on m3.large machine
+# Inserts into PostGres database requires approximately 30 minutes of execution time on m3.large machine
 
 from __future__ import print_function
 
@@ -18,8 +20,7 @@ if __name__ == "__main__":
 
 	sc = SparkContext(appName="PythonWordCount")
 
-#	lines = sc.textFile("/user/w205/enron_emails_text_all.txt", 1)
-	lines = sc.textFile("/user/w205/3.930834.HZQ4RCCE2QEWC2S0AROHKWAKVHJIQNJRA.txt")
+	lines = sc.textFile("/user/w205/enron_emails_text_all.txt")
 
 	counts = lines.flatMap(lambda x: x.split(' ')).map(lambda x: (x, 1)).reduceByKey(add)
 
@@ -27,13 +28,13 @@ if __name__ == "__main__":
 
 	for (word, count) in output:
 		try:
-			print(word.replace("\t", "").replace("\n", "").replace(" ", ""), count)
-			cur = conn.cursor()
-			cur.execute("insert into word_count (word, count) values (%s, %s)", (word.replace("\t", "").replace("\n", "").replace(" ", ""), count))
-			conn.commit()
+			if len(word.replace("\t", "").replace("\n", "").replace(" ", "")) < 20:
+				print(word.replace("\t", "").replace("\n", "").replace(" ", ""), count)
+				cur.execute("insert into word_count (word, count) values (%s, %s)", (word.replace("\t", "").replace("\n", "").replace(" ", ""), count))
 		except:
 			print (sys.exc_info()[0])
 			conn.rollback()
+	conn.commit()
 
 sc.stop()
 conn.close()
