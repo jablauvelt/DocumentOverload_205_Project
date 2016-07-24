@@ -42,5 +42,12 @@ CREATE TABLE phone_filename   (filename TEXT,
 CREATE TABLE word_count       (word TEXT,
                                count int);
 ---
+--- machine_learning.py & machine_learning.json --------------------------------
+---
+CREATE TABLE machine_learning (filename TEXT,
+                               probability_positive TEXT,
+                               probability_negative TEXT,
+                               conclusion TEXT);
+---
 ---------------------------------------------------------------------------------
 ---
