@@ -1,3 +1,11 @@
+# Execute in parallel 26 times using the letters of the alphabet (matched to last name of person)
+# Execution time parallel 26 times on a m3.large machine is about 12 hours
+# Best to kick it off a few hours before bedtime for fresh data in the morning
+# python enron_unpack.py a
+# python enron_unpack.py b
+# python enron_unpack.py y
+# python enron_unpack.py z
+
 import zipfile
 import os
 import sys
