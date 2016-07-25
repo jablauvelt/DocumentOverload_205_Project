@@ -49,10 +49,10 @@ CREATE TABLE machine_learning (filename TEXT,
                                probability_negative TEXT,
                                conclusion TEXT);
 ---
---- machine_learning.py & machine_learning.json --------------------------------
----
-CREATE TABLE email_rank (email TEXT,
-                         rank TEXT);
----
----------------------------------------------------------------------------------
+--- enron_email_rank.py -------------------------------- 
+--- 
+CREATE TABLE email_rank (email TEXT, 
+                         rank TEXT); 
+--- 
+--------------------------------------------------------------------------------- 
 ---
