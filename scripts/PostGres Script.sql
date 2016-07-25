@@ -31,6 +31,7 @@ CREATE TABLE email_body       (filename TEXT,
 ---
 CREATE TABLE zipcode_filename (filename TEXT,
                                zipcode TEXT,
+                               address TEXT,
                                longitude TEXT,
                                latitude TEXT);
 ---
