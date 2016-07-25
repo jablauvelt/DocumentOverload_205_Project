@@ -5,7 +5,9 @@ import sys
 import psycopg2
 import re
 import email
+from geopy.geocoders import Nominatim
 from pyspark import SparkContext
+
 
 def getsome(path):
 
@@ -22,7 +24,8 @@ def getsome(path):
 
 			for z in zipcode:
 				print(filename[filename.rfind("/") + 1:], z)
-				cur.execute("insert into zipcode_filename (zipcode, filename) values (%s, %s)", (z, filename[filename.rfind("/") + 1:]))
+				location = geolocator.geocode(z)
+				cur.execute("insert into zipcode_filename (zipcode, filename, address, longitude, latitude) values (%s, %s, %s, %s, %s)", (z, filename[filename.rfind("/") + 1:], location.address, location.longitude, location.latitude))
 			conn.commit()
 
 			phone = re.findall('[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]', content)
@@ -104,7 +107,7 @@ def getsome(path):
 			file.close()
 
 		except:
-			print(file)
+			print(filename)
 			print(sys.exc_info()[0])
 			conn.rollback()
 
@@ -125,6 +128,8 @@ cur.execute("delete from email_zlid")
 cur.execute("delete from email_body")
 conn.commit()
 
+geolocator = Nominatim()
+
 paths = (
 	'file:/enron_output/text_007/*.txt',
 	'file:/enron_output/text_006/*.txt',
@@ -140,4 +145,3 @@ for p in paths:
 	getsome(p)
 
 conn.close()
-
