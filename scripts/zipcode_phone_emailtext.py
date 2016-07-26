@@ -5,111 +5,122 @@ import sys
 import psycopg2
 import re
 import email
-from geopy.geocoders import Nominatim
+import os
+import gc
 from pyspark import SparkContext
+from pyspark import StorageLevel
 
 
 def getsome(path):
 
 	sc = SparkContext(appName="EnronEmailTextFiles")
+	sc.setLogLevel("WARN")
+	sc.parallelize(range(2), 1)
+	counter = 0
+	counter_print = 0
 
-	files = sc.wholeTextFiles(path)
+	for root, directories, filenames in os.walk(path):
+		for f in filenames:
 
-	file_output = files.collect()
+			file_be_processed = "file:" + root + f
 
-	for (filename, content) in file_output:
-		try:
+			files = sc.wholeTextFiles(file_be_processed)
 
-			zipcode = re.findall('[0-9][0-9][0-9][0-9][0-9]', content)
+			counter = counter + 1
+			counter_print = counter_print + 1
 
-			for z in zipcode:
-				print(filename[filename.rfind("/") + 1:], z)
-				location = geolocator.geocode(z)
-				cur.execute("insert into zipcode_filename (zipcode, filename, address, longitude, latitude) values (%s, %s, %s, %s, %s)", (z, filename[filename.rfind("/") + 1:], location.address, location.longitude, location.latitude))
-			conn.commit()
+			if counter_print > 5:
+				counter_print = 0
+				print("Directory: " + root + ", Number of files processed: " + str(counter) + ", Objects Garbage Collected and Deallocated: " + str(gc.collect()))
 
-			phone = re.findall('[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]', content)
+			for (filename, content) in files.collect():
+				try:
 
-			for p in phone:
-				print(filename[filename.rfind("/") + 1:], p)
-				cur.execute("insert into phone_filename (phone, filename) values (%s, %s)", (p, filename[filename.rfind("/") + 1:]))
-			conn.commit()
+					zipcode = re.findall('[0-9][0-9][0-9][0-9][0-9]', content)
 
-			file = open(filename[filename.find('/'):])
-			message = email.message_from_file(file)
-			print(filename[filename.find('/'):], message.keys())
+					for z in zipcode:
+						cur.execute("insert into zipcode_filename (zipcode, filename) values (%s, %s)", (z, filename[filename.rfind("/") + 1:]))
 
-			for key in message.keys():
+					phone = re.findall('[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]', content)
 
-				email_body = message.get_payload()
-				cur.execute("insert into email_body (filename, email_body) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_body))
+					for p in phone:
+						cur.execute("insert into phone_filename (phone, filename) values (%s, %s)", (p, filename[filename.rfind("/") + 1:]))
 
-				if key.strip() == "From":
+					file = open(filename[filename.find('/'):])
+					message = email.message_from_file(file)
 
-					email_from = message[key].replace("\t", "").replace("\n", "").replace(" ", "")
-					cur.execute("insert into email_from (filename, email_from) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_from))
+					for key in message.keys():
 
-				elif key.strip() == "To":
+						email_body = message.get_payload()
+						cur.execute("insert into email_body (filename, email_body) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_body))
 
-					if message[key].find(">") > 0:
-						for value in message[key].split('>,'):
+						if key.strip() == "From":
 
-							email_to = value.replace("\t", "").replace("\n", "").replace(" ", "")
-							cur.execute("insert into email_to (filename, email_to) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_to))
+							email_from = message[key].replace("\t", "").replace("\n", "").replace(" ", "")
+							cur.execute("insert into email_from (filename, email_from) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_from))
+
+						elif key.strip() == "To":
+
+							if message[key].find(">") > 0:
+								for value in message[key].split('>,'):
+
+									email_to = value.replace("\t", "").replace("\n", "").replace(" ", "")
+									cur.execute("insert into email_to (filename, email_to) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_to))
 	
-					else:
-						for value in message[key].split(','):
+							else:
+								for value in message[key].split(','):
 
-							email_to = value.replace("\t", "").replace("\n", "").replace(" ", "")
-							cur.execute("insert into email_to (filename, email_to) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_to))
+									email_to = value.replace("\t", "").replace("\n", "").replace(" ", "")
+									cur.execute("insert into email_to (filename, email_to) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_to))
 
-				elif key.strip() == "Cc" or key.strip() == "CC":
+						elif key.strip() == "Cc" or key.strip() == "CC":
 
-					if message[key].find(">") > 0:
-						for value in message[key].split('>,'):
+							if message[key].find(">") > 0:
+								for value in message[key].split('>,'):
 
-							email_cc = value.replace("\t", "").replace("\n", "").replace(" ", "")
-							cur.execute("insert into email_cc (filename, email_cc) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_cc))
+									email_cc = value.replace("\t", "").replace("\n", "").replace(" ", "")
+									cur.execute("insert into email_cc (filename, email_cc) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_cc))
 
-					else:
+							else:
 
-						for value in message[key].split(','):
+								for value in message[key].split(','):
 
-							email_cc = value.replace("\t", "").replace("\n", "").replace(" ", "")
-							cur.execute("insert into email_cc (filename, email_cc) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_cc))
+									email_cc = value.replace("\t", "").replace("\n", "").replace(" ", "")
+									cur.execute("insert into email_cc (filename, email_cc) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_cc))
 
-				elif key.strip() == "Subject":
+						elif key.strip() == "Subject":
 
-					email_subject = message[key].replace("\t", "").replace("\n", "")
-					cur.execute("insert into email_subject (filename, email_subject) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_subject))
+							email_subject = message[key].replace("\t", "").replace("\n", "")
+							cur.execute("insert into email_subject (filename, email_subject) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_subject))
 
-				elif key.strip() == "Date":
+						elif key.strip() == "Date":
 
-					email_date = message[key].replace("\t", "").replace("\n", "")
-					cur.execute("insert into email_date (filename, email_date) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_date))
+							email_date = message[key].replace("\t", "").replace("\n", "")
+							cur.execute("insert into email_date (filename, email_date) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_date))
 
-				elif key.strip() == "X-SDOC":
+						elif key.strip() == "X-SDOC":
 
-					email_sdoc = message[key].replace("\t", "").replace("\n", "")
-					cur.execute("insert into email_sdoc (filename, email_sdoc) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_sdoc))
+							email_sdoc = message[key].replace("\t", "").replace("\n", "")
+							cur.execute("insert into email_sdoc (filename, email_sdoc) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_sdoc))
 
-				elif key.strip() == "X-ZLID":
+						elif key.strip() == "X-ZLID":
+							
+							email_zlid = message[key].replace("\t", "").replace("\n", "")
+							cur.execute("insert into email_zlid (filename, email_zlid) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_zlid))
 
-					email_zlid = message[key].replace("\t", "").replace("\n", "")
-					cur.execute("insert into email_zlid (filename, email_zlid) values (%s, %s)", (filename[filename.rfind("/") + 1:], email_zlid))
+						else:
+							print("Data to be researched later:")
+							print("KEY: " + key.strip())
+							print("VALUE: " + message[key])
 
-				else:
+					conn.commit()
+					file.close()
 
-					print(key.strip() + ":")
-					print(message[key])
-
-			conn.commit()
-			file.close()
-
-		except:
-			print(filename)
-			print(sys.exc_info()[0])
-			conn.rollback()
+				except:
+					print("Data Errors:")
+					print("FILENAME: " + filename)
+					print("SYSTEM ERROR: ", sys.exc_info()[0])
+					conn.rollback()
 
 	sc.stop()
 
@@ -128,20 +139,18 @@ cur.execute("delete from email_zlid")
 cur.execute("delete from email_body")
 conn.commit()
 
-geolocator = Nominatim()
-
 paths = (
-	'file:/enron_output/text_007/*.txt',
-	'file:/enron_output/text_006/*.txt',
-	'file:/enron_output/text_005/*.txt',
-	'file:/enron_output/text_004/*.txt'
-#	'file:/enron_output/text_003/*.txt'
-#	'file:/enron_output/text_002/*.txt'
-#	'file:/enron_output/text_001/*.txt'
+	'/enron_output/text_007/',
+	'/enron_output/text_006/',
+	'/enron_output/text_005/',
+	'/enron_output/text_004/',
+	'/enron_output/text_003/',
+	'/enron_output/text_002/',
+	'/enron_output/text_001/',
+	'/enron_output/text_000/'
 	)
 
 for p in paths:
-	print("Now Processing:", p)
 	getsome(p)
 
 conn.close()
