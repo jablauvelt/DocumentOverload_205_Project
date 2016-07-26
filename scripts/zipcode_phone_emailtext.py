@@ -15,11 +15,13 @@ def getsome(path):
 
 	sc = SparkContext(appName="EnronEmailTextFiles")
 	sc.setLogLevel("WARN")
-	sc.parallelize(range(2), 1)
 	counter = 0
 	counter_print = 0
 
 	for root, directories, filenames in os.walk(path):
+
+		sc.parallelize(filenames, 8)
+
 		for f in filenames:
 
 			file_be_processed = "file:" + root + f
