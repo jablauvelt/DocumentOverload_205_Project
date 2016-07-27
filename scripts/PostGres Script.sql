@@ -34,6 +34,7 @@ CREATE TABLE zipcode_filename (filename TEXT,
                                address TEXT,
                                longitude TEXT,
                                latitude TEXT);
+CREATE INDEX zf_update_go_fast ON zipcode_filename (filename, zipcode);
 ---
 CREATE TABLE phone_filename   (filename TEXT,
                                phone TEXT);
@@ -50,10 +51,10 @@ CREATE TABLE machine_learning (filename TEXT,
                                probability_negative TEXT,
                                conclusion TEXT);
 ---
---- enron_email_rank.py -------------------------------- 
---- 
-CREATE TABLE email_rank (email TEXT, 
-                         rank TEXT); 
---- 
---------------------------------------------------------------------------------- 
+--- enron_email_rank.py --------------------------------
+---
+CREATE TABLE email_rank (email TEXT,
+                         rank TEXT);
+---
+---------------------------------------------------------------------------------
 ---
