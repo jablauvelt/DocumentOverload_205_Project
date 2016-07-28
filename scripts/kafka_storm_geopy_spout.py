@@ -6,7 +6,7 @@ from streamparse.spout import Spout
 class KafkaSpout(Spout):
 
 	def initialize(self, stormconf, context):
-		self.consumer = KafkaConsumer('getsome')
+		self.consumer = KafkaConsumer('getsome3')
 	
 	def next_tuple(self):
 		for message in self.consumer:

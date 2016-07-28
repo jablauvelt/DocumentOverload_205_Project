@@ -1,8 +1,8 @@
-(ns wordcount
+(ns geopy
   (:use     [streamparse.specs])
   (:gen-class))
 
-(defn wordcount [options]
+(defn geopy [options]
    [
     ;; spout configuration
     {"kafka-spout" (python-spout-spec
@@ -16,8 +16,8 @@
           options
           {"kafka-spout" :shuffle}
           "bolts.kafka_storm_geopy_bolt.GeopyBolt"
-          ["filename" "zipcode"]
-          :p 1
+          ["zipcode"]
+          :p 5
           )
     }
   ]
