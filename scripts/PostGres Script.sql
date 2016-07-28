@@ -34,7 +34,7 @@ CREATE TABLE zipcode_filename (filename TEXT,
                                address TEXT,
                                longitude TEXT,
                                latitude TEXT);
-CREATE INDEX zf_update_go_fast ON zipcode_filename (filename, zipcode);
+CREATE INDEX zf_update_go_fast ON zipcode_filename (zipcode);
 ---
 CREATE TABLE phone_filename   (filename TEXT,
                                phone TEXT);
