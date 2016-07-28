@@ -5,4 +5,4 @@
 - Jason Blauvelt
 - Geoffrey Link
 - Megan Pera
-- Guangzhi (Frank) Xie
+- Frank Xie
