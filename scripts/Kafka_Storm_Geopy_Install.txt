@@ -6,11 +6,11 @@
 -
 3) Running Zookeeper:  /root/kafka_2.11-0.10.0.0/bin/zookeeper-server-start.sh /root/kafka_2.11-0.10.0.0/config/zookeeper.properties
 -
-4) Running a Kafka Server: /root/kafka_2.11-0.10.0.0/bin/kafka-server-start.sh /root/kafka_2.11-0.10.0.0/config/server.properties 
+4) Running a Kafka Server: /root/kafka_2.11-0.10.0.0/bin/kafka-server-start.sh /root/kafka_2.11-0.10.0.0/config/server.properties
 -
-5) Creating a topic: /root/kafka_2.11-0.10.0.0/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic w205
+5) Creating a topic: /root/kafka_2.11-0.10.0.0/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic getsome3
 -
-6) Deleting a topic: /root/kafka_2.11-0.10.0.0/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic w205
+6) Deleting a topic: /root/kafka_2.11-0.10.0.0/bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic getsome3
 -
 7) List topics: /root/kafka_2.11-0.10.0.0/bin/kafka-topics.sh --list --zookeeper localhost:2181
 -
