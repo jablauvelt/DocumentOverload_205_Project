@@ -24,3 +24,5 @@
 
 Watch out for hidden files (they are prefixed by a "."), you need to remove these manually (ls -a)
 -
+2) If you fill up your Kafka Queues, use kafka_consumer.py to clean them out ASAP.
+-
