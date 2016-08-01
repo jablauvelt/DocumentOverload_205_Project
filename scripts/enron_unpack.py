@@ -24,6 +24,6 @@ for root, directories, filenames in os.walk('/enron/edrm-enron-v2/'):
 						if z.find('.txt') > 0:
 							if z.find('text_') == 0:
 								# save .txt files to /enron_output/text_00* folders
-								os.system("unzip " + root + f + " " + z + " -d /enron_output/")
+i								os.system("unzip " + root + f + " " + z + " -d /enron_output")
 				except:
 					print (sys.exc_info()[0])
