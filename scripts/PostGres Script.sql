@@ -47,8 +47,8 @@ CREATE TABLE word_count       (word TEXT,
 --- machine_learning.py & machine_learning.json --------------------------------
 ---
 CREATE TABLE machine_learning (filename TEXT,
-                               probability_positive TEXT,
-                               probability_negative TEXT,
+                               probability_positive DECIMAL(17,15),
+                               probability_negative DECIMAL(17,15),
                                conclusion TEXT);
 ---
 --- enron_email_rank.py --------------------------------
