@@ -12,5 +12,5 @@ This file will walk you through the steps necessary to create an EMR cluster, wh
 8. Create cluster / Finish
 9. Go back to security groups (left sidebar in EC2), and edit the default Master Security Group that was just created and add open up the inbound port 22 for SSH.
 10. [Placeholder - create python script and copy paste it in? Or pull from S3? or from git?]
-11. Run in bash, replacing the IP address with the IP of the master: `spark-submit --packages org.apache.hadoop:hadoop-aws:2.7.1 --master spark://54.205.231.220 SimpleApp.py`
+11. Run in bash, replacing the IP address with the IP of the master: `spark-submit --packages org.apache.hadoop:hadoop-aws:2.7.1 --master spark://54.205.231.220 3_parse_zips_and_phones.py`
 
