@@ -13,3 +13,13 @@
 
 # Setup S3
 1. (WIP)
+--------------------------------------------
+
+# Upload .txt files to S3
+In Bash on AWS instance:
+
+1. To upload a folder:  `aws s3 sync unzipped_txt s3://docoverload`
+2. To upload a single file: `aws s3 cp /tmp/enron_emails_text_all.txt s3://docoverload`
+
+!! Note - we need to figure out which one of these we want to go with ^^^
+
