@@ -10,3 +10,6 @@
 3. In Bash on AWS instance: `aws configure`
 4. Enter Key ID and Access Key for the first two prompts, then "us-east-1" for the third, then just press Enter for the fourth prompt.
 5. Test: `aws help`
+
+# Setup S3
+1. (WIP)
