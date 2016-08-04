@@ -1,12 +1,12 @@
 # Data are stored as .zip files for each Enron employee. This file pulls out the .txt files from each .zip file. 
 
 # Execute in parallel 26 times using the letters of the alphabet (matched to last name of person)
-# To execute, run : nohup python enron_unpack.py <letter of alphabet> &, e.g:
-# nohup python enron_unpack.py a &
-# nohup python enron_unpack.py b &
+# To execute, run : nohup python 6_extract_txts_from_zips.py <letter of alphabet> &, e.g:
+# nohup python 6_extract_txts_from_zips.py a &
+# nohup python 6_extract_txts_from_zips.py b &
 # ...
-# nohup python enron_unpack.py y &
-# nohup python enron_unpack.py z &
+# nohup python 6_extract_txts_from_zips.py y &
+# nohup python 6_extract_txts_from_zips.py z &
 
 import zipfile
 import os
