@@ -7,6 +7,7 @@ Instance setup
 - Search UCB MIDS under "Community AMIs" -< UCB W205 Spring 2016
 - Under "instance type", select: General Purpose, m3.large
 - For security group, select: Hadoop Cluster UCB
+  - Make sure that port 5432 is open 
 - Launch instance
 
 Enron data volume setup
