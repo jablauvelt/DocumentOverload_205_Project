@@ -18,7 +18,7 @@ conn.commit()
 
 sc = SparkContext(appName="PythonWordCount")
 
-lines = sc.textFile('file:///tmp/enron_emails_text_all.txt')
+lines = sc.textFile('/enron_output/enron_emails_text_all.txt')
 
 counts = lines.flatMap(lambda x: x.split(' ')).map(lambda x: (x, 1)).reduceByKey(add)
 
