@@ -16,25 +16,23 @@ cur = conn.cursor()
 cur.execute("delete from word_count")
 conn.commit()
 
-if __name__ == "__main__":
+sc = SparkContext(appName="PythonWordCount")
 
-	sc = SparkContext(appName="PythonWordCount")
+lines = sc.textFile('file:///tmp/enron_emails_text_all.txt')
 
-	lines = sc.textFile("/user/w205/enron_emails_text_all.txt")
+counts = lines.flatMap(lambda x: x.split(' ')).map(lambda x: (x, 1)).reduceByKey(add)
 
-	counts = lines.flatMap(lambda x: x.split(' ')).map(lambda x: (x, 1)).reduceByKey(add)
+output = counts.collect()
 
-	output = counts.collect()
+for (word, count) in output:
+	try:
+		if len(word.replace("\t", "").replace("\n", "").replace(" ", "")) < 20:
+			print(word.replace("\t", "").replace("\n", "").replace(" ", ""), count)
+			cur.execute("insert into word_count (word, count) values (%s, %s)", (word.replace("\t", "").replace("\n", "").replace(" ", ""), count))
+	except:
+		print (sys.exc_info()[0])
+		conn.rollback()
 
-	for (word, count) in output:
-		try:
-			if len(word.replace("\t", "").replace("\n", "").replace(" ", "")) < 20:
-				print(word.replace("\t", "").replace("\n", "").replace(" ", ""), count)
-				cur.execute("insert into word_count (word, count) values (%s, %s)", (word.replace("\t", "").replace("\n", "").replace(" ", ""), count))
-		except:
-			print (sys.exc_info()[0])
-			conn.rollback()
-	conn.commit()
-
-sc.stop()
+conn.commit()
 conn.close()
+sc.stop()

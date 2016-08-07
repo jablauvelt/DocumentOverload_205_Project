@@ -55,7 +55,7 @@ files = sc.textFile('file:///tmp/enron_emails_text_all.txt')
 #files = sc.wholeTextFiles('s3://docoverload/text_000')
 
 # Zips:
-# For each file, get the zip code and filter to non-blanks. Convert each zipcode to 
+# For each file, get the zip code and filter to non-blanks. Convert each zipcode to
 # a tuple so it can be summarized with reduceByKey()
 zips = files.map(get_zip).filter(lambda s: s).map(lambda s: (s, 1))
 
