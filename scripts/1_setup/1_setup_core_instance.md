@@ -25,13 +25,13 @@
 #### Mount enron and enron_output volumes on the instance
 - First, attach enron and enron_output volumes on AWS Elastic Block Storage
 - In bash on EC2 instance, create directories:
-  -- $ mkdir /enron
-  -- $ mkdir /enron_output
+  - $ mkdir /enron
+  - $ mkdir /enron_output
 - Set up an ext4 filesystem on the /enron_output volume:
-  -- $ fdisk -l
-  -- $ mkfs.ext4 /dev/xvd_ 
+  - $ fdisk -l
+  - $ mkfs.ext4 /dev/xvd_ 
 - Mount volumes on instance
-  -- mount -t ext4 /dev/xvd_ /enron
-  -- mount -t ext4 /dev/xvd_ /enron_output
+  - mount -t ext4 /dev/xvd_ /enron
+  - mount -t ext4 /dev/xvd_ /enron_output
 
 
