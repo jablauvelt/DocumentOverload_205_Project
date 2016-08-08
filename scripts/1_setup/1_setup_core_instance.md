@@ -1,4 +1,4 @@
-# Steps Taken to Setup the AWS Instance and attach the dataset
+## Steps Taken to Setup the AWS Instance and attach the dataset
 
 ###In EC2:
 
