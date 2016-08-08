@@ -31,7 +31,7 @@
   - $ fdisk -l
   - $ mkfs.ext4 /dev/xvd_ 
 - Mount volumes on instance
-  - mount -t ext4 /dev/xvd_ /enron
-  - mount -t ext4 /dev/xvd_ /enron_output
+  - $ mount -t ext4 /dev/xvd_ /enron
+  - $ mount -t ext4 /dev/xvd_ /enron_output
 
 
