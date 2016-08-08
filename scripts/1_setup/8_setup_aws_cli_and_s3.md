@@ -12,8 +12,7 @@
 5. Test: `aws help`
 
 # Setup S3
-1. (WIP)
---------------------------------------------
+1. Create an S3 bucket in AWS S3 called "docoverload". It should be pretty straightforward - just make sure it's in the US East.
 
 # Upload .txt files to S3
 In Bash on AWS instance:
