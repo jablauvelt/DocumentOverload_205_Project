@@ -21,3 +21,17 @@ Enron data volume setup
 - Attach the 100G data volume to instance; wait to attach enron and enron_output until later steps
 
 Connect to instance, and run bash setup script
+
+# Mount EBS volumes on the instance
+# First, attach enron volume on aws
+# Change paths based on where the volumes are
+fdisk -l
+mkdir /enron
+mount -t ext4 /dev/xvdf /enron
+mount -t ext4 /dev/xvdg /data
+
+# Create a folder for output data
+mkdir /enron_output
+
+
+# Write all outputs to the enron_output folder
