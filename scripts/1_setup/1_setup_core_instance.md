@@ -17,7 +17,7 @@ Enron data volume setup
 - Click Create Volume (create in same zone as the instance)
 - Left Sidebar: Elastic Block Store -> Volumes
 - Rename volume 'enron'
-- Create another volume called 'data' (100G) (in the same zone as the instance)
-- Attach the 100G data volume to instance; wait to attach enron until later steps
+- Create another volume called 'data' (100G) and a volume called 'enron_output' (in the same zone as the instance)
+- Attach the 100G data volume to instance; wait to attach enron and enron_output until later steps
 
-Connect to instance, and reference bash setup script
+Connect to instance, and run bash setup script
