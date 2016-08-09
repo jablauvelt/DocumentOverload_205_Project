@@ -1,13 +1,27 @@
 #!/bin/bash
 
-# Instance setup; may need to adjust paths based on volume location
+#!!!!!!!!!!!!!!!!chmod a+rwx /enron_output # makes the data folder rwx to all users
 
-fdisk -l # take note of where the 100G volume is located
-chmod a+rwx /data # makes the data folder rwx to all users
-wget https://s3.amazonaws.com/ucbdatasciencew205/setup_ucb_complete_plus_postgres.sh
-chmod +x ./setup_ucb_complete_plus_postgres.sh
-# Takes ~6 minutes to complete
-./setup_ucb_complete_plus_postgres.sh /dev/xvdf #CHANGE based on path to 100G volume, from above 
+# Setup folders
+mkdir /enron_output/pgsql
+mkdir /enron_output/pgsql/data
+mkdir /enron_output/pgsql/logs
+chown -R postgres /enron_output/pgsql
+sudo -u postgres initdb -D /enron_output/pgsql/data
+
+#setup pg_hba.conf
+sudo -u postgres echo "host    all         all         0.0.0.0         0.0.0.0               md5" >> /enron_output/pgsql/data/pg_hba.conf
+
+#setup postgresql.conf
+sudo -u postgres echo "listen_addresses = '*'" >> /enron_output/pgsql/data/postgresql.conf
+sudo -u postgres echo "standard_conforming_strings = off" >> /enron_output/pgsql/data/postgresql.conf
+
+### Start
+# To start postgres service:
+sudo -u postgres pg_ctl -D /enron_output/pgsql/data -l /enron_output/pgsql/logs/pgsql.log start
+# Check that it's running:
+ps auxwww | grep postgres
+
 
 # Python 2.7 install - since the Amazon instance comes with Python 2.6
 sudo yum install python27-devel –y
@@ -20,4 +34,4 @@ mv /usr/bin/python /usr/bin/python266
 ln -s /usr/bin/python2.7 /usr/bin/python
 # Check that the shell picks up the version of Python you intended
 python --version
-#--> Python 2.7
+#--> Python 2.7.3
