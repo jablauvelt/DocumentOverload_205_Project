@@ -17,13 +17,13 @@ zip -FF edrm-enron-v2_kaminski-v_xml.zip --out edrm-enron-v2_kaminski-v_xml_full
 XML_ZIPS=$(ls | grep xml.*zip | grep -v kean-s_xml\\.zip | grep -v kaminski-v_xml\\.zip)
 
 # Create unzipped directory
-mkdir unzipped
+mkdir /enron_output/xmls
 
 # Create a folder for each custodian and extract just the XML metadata files into it.
 for i in $XML_ZIPS
 do 
-	mkdir "unzipped/$(basename $i .zip)"
-	unzip -j $i "*.xml" -d "/enron/edrm-enron-v2/unzipped/$(basename $i .zip)"	
+	mkdir "/enron_output/xmls/$(basename $i .zip)"
+	unzip -j $i "*.xml" -d "/enron_output/xmls/$(basename $i .zip)"	
 done
 
 
