@@ -77,9 +77,10 @@ for path in paths:
 					classification = sentiment.sentiment.classification
 					p_pos = sentiment.sentiment.p_pos
 					p_neg = sentiment.sentiment.p_neg
+					fName = filename.split('/')[3]
 
 					cur.execute("INSERT INTO machine_learning (filename,probability_positive,probability_negative,conclusion) \
-						VALUES (%s,%s,%s,%s)", (filename, p_pos, p_neg, classification));
+						VALUES (%s,%s,%s,%s)", (fName, p_pos, p_neg, classification));
 
 				except:
 					print("Data Errors:")
