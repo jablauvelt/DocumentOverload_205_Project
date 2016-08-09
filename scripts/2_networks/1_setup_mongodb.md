@@ -19,5 +19,4 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.2.asc
 - `cat /var/log/mongodb/mongod.log` (This checks that the service is running correctly)
 
 ## 2. Install pymongo
-- Make sure you are in the 2.7 virtualenv
 - `python -m pip install pymongo`
