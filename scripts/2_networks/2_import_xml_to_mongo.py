@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 import xmltodict
 
 # Set root directory
-root = '/enron/edrm-enron-v2/unzipped'
+root = '/enron_output/xmls'
 
 # Access MongoDB "xmls" collection
 client = pymongo.MongoClient()
@@ -19,7 +19,7 @@ if xmls.count():
 	if confirm = 'r':
 		xmls.drop()
 
-# Loop through each file in unzipped/ (all the files are xmls, and were put in
+# Loop through each file in xmls (all the files are xmls, and were put in
 # there by extract_xml_metadata_from_zips.sh)
 for root, folders, files in os.walk(root):
 	for idx, filename in enumerate(files):
@@ -46,7 +46,7 @@ for root, folders, files in os.walk(root):
 			print "INDEX ERROR - bad tree --------------------------------------!!"
 			continue
 
-		# We can't upload the full set of docs to MongoDB - each document we upload
+		# We can't upload a file with multiple docs in it to MongoDB - each document we upload
 		# to MongoDB needs to be an individual document (email) from an XML perspective too.
 		# Each child is a document starting with <document> and ending with </document>
 		for idx, child in enumerate(docs):
