@@ -12,13 +12,12 @@
 5. Test: `aws help`
 
 # Setup S3
-1. Create an S3 bucket in AWS S3 called "docoverload". It should be pretty straightforward - just make sure it's in the US East.
+
+1. Create an S3 bucket in AWS S3 called "docoverload" (or something similar, if that name is taken. Anywhere in the rest of this repository that you see a reference to "docoverload", instead insert the name of your bucket). The process should be pretty straightforward - just make sure it's in the US East.
 
 # Upload .txt files to S3
+
 In Bash on AWS instance:
 
-1. To upload a folder:  `aws s3 sync unzipped_txt s3://docoverload`
-2. To upload a single file: `aws s3 cp /tmp/enron_emails_text_all.txt s3://docoverload`
-
-!! Note - we need to figure out which one of these we want to go with ^^^
+1. Upload the single combined file txt file: `aws s3 cp /enron_output/enron_emails_text_all.txt s3://docoverload`
 
