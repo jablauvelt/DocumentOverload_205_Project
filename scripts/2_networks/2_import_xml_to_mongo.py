@@ -16,7 +16,7 @@ xmls = collection.xmls
 # Check to see if user wants to add to existing collection, or reset it
 if xmls.count():
 	confirm =raw_input("The xmls collection already has " + str(xmls.count()) + " documents. Enter 'c' to add to this collection or 'r' to reset it and start from scratch.")
-	if confirm = 'r':
+	if confirm == 'r':
 		xmls.drop()
 
 # Loop through each file in xmls (all the files are xmls, and were put in
