@@ -11,16 +11,7 @@ import csv
 sc = SparkContext(appName="EnronEmailTextFiles")
 sc.setLogLevel("WARN")
 
-# Search for zipcodes: works with sc.wholeTextFiles(), which returns a tuple of (filename, contents)
-#def get_zip(tup):
-#        zipcodes = re.findall('\\b[0-9]{5}\\b', tup[1])
-#        if zipcodes:
-#		# print tup[0] # tup[0] is the filename
-#                return zipcodes[0]
-#        else:
-#                return 0
-
-# Search for zipcodes: works with textFile()
+# Search for zipcodes
 def get_zip(content):
         zipcodes = re.findall('\\b[0-9]{5}\\b', content)
         if zipcodes:
@@ -29,7 +20,7 @@ def get_zip(content):
         else:
                 return 0
 
-# Search for phone: works with textFile()
+# Search for phone
 def get_phone(content):
         phones = re.findall('\\b[0-9]{3}[^0-9]?[0-9]{3}[^0-9]?[0-9]{4}\\b', content)
         if phones:
@@ -44,15 +35,8 @@ start_time = datetime.datetime.now()
 print 'Start time:'
 print start_time
 
-# Get files - uncomment everything except the one you want to use
-# Option 1: Combined text file from local file system (for testing only)
-files = sc.textFile('file:///tmp/enron_emails_text_all.txt')
-# Option 2: combined text file from s3
-#files = sc.textFile('s3://docoverload/enron_emails_text_all.txt')
-# Option 3: loose text files from file system (for testing only)
-#files = sc.wholeTextFiles('file:///enron/edrm-enron-v2/unzipped_txt/text_000/')
-# Option 4: loose text files directly from S3
-#files = sc.wholeTextFiles('s3://docoverload/text_000')
+# Combined text file from s3
+files = sc.textFile('s3://docoverload/enron_emails_text_all.txt')
 
 # Zips:
 # For each file, get the zip code and filter to non-blanks. Convert each zipcode to
