@@ -1,7 +1,7 @@
 #
-# Aggregates all email text files into a single 8.3Gb file
+# Aggregates all email text files into a single 11Gb file
 # Monitor file size while generating from the command line using: du -hs /enron_output/enron_emails_text_all.txt
-# Appoximate time to generate is 20 minutes using a m3.medium host
+# Appoximate time to generate is 30 minutes using a m3.medium host
 #
 
 import os
