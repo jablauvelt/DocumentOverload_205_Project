@@ -7,7 +7,13 @@ In 1_setup folder:
 3. `python 1_setup/3_create_postgres_db.py`
 4. `python 1_setup/4_create_postgres_tables.py`
 5. `chmod u+x 1_setup/5_extract_xml_metadata_from_zips.sh`
-6. `1_setup/5_extract_xml_metadata_from_zips.sh`
+6. `1_setup/5_extract_xml_metadata_from_zips.sh` (~ 30 minutes on m3.medium)
 7. `python 1_setup/6_extract_txts_from_zips.py`
-8. `python 1_setup/7_combine_txts.py`
+8. `python 1_setup/7_combine_txts.py` (~ 30 minutes on m3.medium)
 9. Follow instructions on 8_setup_aws_cli_and_s3.md
+
+In 2_networks folder:
+
+1. Follow instructions in 1_setup_mongodb.md
+2. `python 2_networks/2_import_xml_to_mongo.py`
+3. `python 2_networks/3_summarize_and_upload_to_postgres.py`
