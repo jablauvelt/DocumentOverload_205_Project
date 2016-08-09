@@ -40,4 +40,4 @@ python --version
 # Pull in scripts from GitHub Repository (this one), so you can run scripts from the command line
 `cd /home/w205`
 `git clone https://jablauvelt@github.com/jablauvelt/DocumentOverload_205_Project.git`
-`cd /DocumentOverload_205_Project`
+`cd /DocumentOverload_205_Project/scripts`
