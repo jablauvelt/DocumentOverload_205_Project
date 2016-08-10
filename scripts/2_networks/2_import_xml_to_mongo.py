@@ -1,3 +1,4 @@
+# Takes about 2 hours and 10 minutes to run on m3.medium
 import os
 import datetime
 import pymongo
