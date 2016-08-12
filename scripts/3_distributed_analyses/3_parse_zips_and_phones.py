@@ -85,3 +85,4 @@ print 'End time:'
 print end_time
 print 'Total time elapsed: ' + str((end_time - start_time).seconds * 1.0 / 3600) + ' hours'
 
+sc.stop()
