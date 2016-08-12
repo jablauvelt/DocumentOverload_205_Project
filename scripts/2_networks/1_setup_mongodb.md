@@ -18,5 +18,3 @@ gpgkey=https://www.mongodb.org/static/pgp/server-3.2.asc
 - `sudo service mongod start`
 - `cat /var/log/mongodb/mongod.log` (This checks that the service is running correctly)
 
-## 2. Install pymongo
-- `python -m pip install pymongo`

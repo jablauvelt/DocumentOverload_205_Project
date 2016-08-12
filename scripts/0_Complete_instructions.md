@@ -8,7 +8,7 @@ In 1_setup folder:
 4. `python 1_setup/4_create_postgres_tables.py`
 5. `chmod u+x 1_setup/5_extract_xml_metadata_from_zips.sh`
 6. `1_setup/5_extract_xml_metadata_from_zips.sh` (~ 30 minutes on m3.medium)
-7. `python 1_setup/6_extract_txts_from_zips.py`
+7. `python 1_setup/6_extract_txts_from_zips.py`  (~ 10 minutes on m3.medium)
 8. `python 1_setup/7_combine_txts.py` (~ 30 minutes on m3.medium)
 9. Follow instructions on 8_setup_aws_cli_and_s3.md
 

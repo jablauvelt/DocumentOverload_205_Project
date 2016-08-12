@@ -12,9 +12,9 @@ This file will walk you through the steps necessary to create an EMR cluster, wh
 8. Keep the default security groups
 9. Create cluster / Finish
 10. Go back to security groups (left sidebar in EC2), and edit the default Master Security Group that was just created and add open up the inbound port 22 for SSH.
-11. Connect to the Master node the same way you would normally connect to an EC2 instance (use whatever the command is in the "Connect" window for the Master node in the EC2 instances list.)
+11. Connect to the Master node the same way you would normally connect to an EC2 instance (use whatever the command is in the "Connect" window for the Master node in the EC2 instances list). But log in as ec2-user instead of root.
 12. Exit out of the ec2-user Use the root account by entering 'sudo su' in bash.
-13. Make a new script (e.g., `vim /home/w205/doc_overload/3_parse_zips_and_phones.py`), and copy/paste in the code from `3_parse_zips_and_phones.py`.
+13. Make a new script (e.g., `vim /home/w205/doc_overload/3_parse_zips_and_phones.py`), and copy/paste in the code from `3_parse_zips_and_phones.py`. Change the name of the S3 bucket to match the one you created.
 14. Run the following command in bash, replacing the IP address with the IP of the master: `spark-submit --packages org.apache.hadoop:hadoop-aws:2.7.1 --master spark://54.205.231.220 3_parse_zips_and_phones.py`
 15. Close the cluster when you're done or your wallet will be very sorry.
 
