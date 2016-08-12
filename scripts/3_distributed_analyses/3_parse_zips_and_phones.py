@@ -2,6 +2,7 @@
 ### zipcode_phone.py
 ### Purpose: Search emails for zipcodes and phone numbers using Spark
 ###		and save counts of zips/phones to a text file.
+### Takes about 10 minutes on a cluster with 1 master and 3 worker nodes, all m3.xlarge
 
 from pyspark import SparkContext
 import re
@@ -73,15 +74,14 @@ with open('/tmp/phones.csv', 'w') as fl:
                 writer.writerow(i)
 
 
+# Copy files to AWS S3
+os.system("aws s3 cp /tmp/zips.csv s3://docoverload")
+os.system("aws s3 cp /tmp/phones.csv s3://docoverload")
+print 'Files copied to S3 as zips.csv and phones.csv'
+
 # Print end time
 end_time = datetime.datetime.now()
 print 'End time:'
 print end_time
 print 'Total time elapsed: ' + str((end_time - start_time).seconds * 1.0 / 3600) + ' hours'
 
-
-########################################
-# TO DO
-# - Get working with filename and combined files
-# - save directly to S3 or to Postgres DB
-########################################
