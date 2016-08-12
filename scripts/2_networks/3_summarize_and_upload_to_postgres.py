@@ -1,5 +1,5 @@
 ### Document Overload
-### Takes about 12 minutes on m3.medium
+### Takes about 30 minutes on m3.medium
 import sys
 import datetime
 import re
