@@ -1,1 +1,1 @@
-# WIP
+pprint(xmls.find_one()['Tags']
