@@ -1,38 +1,47 @@
-# /home/w205/spark15/bin/spark-submit /enron_output/wordcount.py
-# Spark piece requires approximately 40 minutes of execution time on m3.large machine
-# Inserts into PostGres database requires approximately 30 minutes of execution time on m3.large machine
-
-from __future__ import print_function
-
-import sys
-from operator import add
-import psycopg2
+### Dealing With Document Overload
+### 4_wordcount.py
+### Purpose: Count words in emails
+### Takes about 10 minutes on a cluster with 1 master and 3 worker nodes, all m3.xlarge
 
 from pyspark import SparkContext
+import re
+import datetime
+import csv
 
-conn = psycopg2.connect(database="finalproject", user="postgres", password="pass", host="localhost", port="5432")
+sc = SparkContext(appName="EnronEmailTextFiles")
+sc.setLogLevel("WARN")
 
-cur = conn.cursor()
-cur.execute("delete from word_count")
-conn.commit()
+# Print start time
+start_time = datetime.datetime.now()
+print 'Start time:'
+print start_time
 
-sc = SparkContext(appName="PythonWordCount")
+# Combined text file from s3
+files = sc.textFile('s3://docoverload/enron_emails_text_all.txt')
 
-lines = sc.textFile('/enron_output/enron_emails_text_all.txt')
+counts = lines.flatMap(lambda x: re.sub("'", '', x).split(' ')).map(lambda x: (x, 1))
+counts2 = counts.filter(lambda x: len(x) < 20).reduceByKey(lambda a, b: a + b).collect()
 
-counts = lines.flatMap(lambda x: x.split(' ')).map(lambda x: (x, 1)).reduceByKey(add)
+# Print spark time
+print 'Time Spark portion finished:'
+print str((datetime.datetime.now() - start_time).seconds * 1.0 / 3600) + ' hours'
 
-output = counts.collect()
 
-for (word, count) in output:
-	try:
-		if len(word.replace("\t", "").replace("\n", "").replace(" ", "")) < 20:
-			print(word.replace("\t", "").replace("\n", "").replace(" ", ""), count)
-			cur.execute("insert into word_count (word, count) values (%s, %s)", (word.replace("\t", "").replace("\n", "").replace(" ", ""), count))
-	except:
-		print (sys.exc_info()[0])
-		conn.rollback()
+# Export wrods to text file
+print 'Saving words to file:'
+with open('/tmp/wordcounts.csv', 'w') as fl:
+	writer = csv.writer(fl)
+	for i in counts2:
+		writer.writerow(i)
 
-conn.commit()
-conn.close()
+# Copy files to AWS S3
+os.system("aws s3 cp /tmp/wordcounts.csv s3://docoverload")
+print 'File copied to S3 as wordcounts.csv'
+
+# Print end time
+end_time = datetime.datetime.now()
+print 'End time:'
+print end_time
+print 'Total time elapsed: ' + str((end_time - start_time).seconds * 1.0 / 3600) + ' hours'
+
 sc.stop()
