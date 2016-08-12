@@ -19,7 +19,7 @@ print start_time
 # Combined text file from s3
 files = sc.textFile('s3://docoverload/enron_emails_text_all.txt')
 
-counts = lines.flatMap(lambda x: re.sub("'", '', x).split(' ')).map(lambda x: (x, 1))
+counts = files.flatMap(lambda x: re.sub("'", '', x).split(' ')).map(lambda x: (x, 1))
 counts2 = counts.filter(lambda x: len(x) < 20).reduceByKey(lambda a, b: a + b).collect()
 
 # Print spark time
