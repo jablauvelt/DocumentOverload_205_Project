@@ -1,9 +1,10 @@
 ### Dealing With Document Overload
 ### 4_wordcount.py
 ### Purpose: Count words in emails
-### Takes about 10 minutes on a cluster with 1 master and 3 worker nodes, all m3.xlarge
+### Takes about 20 minutes on a cluster with 1 master and 3 worker nodes, all m3.xlarge
 
 from pyspark import SparkContext
+import os
 import re
 import datetime
 import csv
@@ -19,7 +20,7 @@ print start_time
 # Combined text file from s3
 files = sc.textFile('s3://docoverload/enron_emails_text_all.txt')
 
-counts = files.flatMap(lambda x: re.sub("'", '', x).split(' ')).map(lambda x: (x, 1))
+counts = files.flatMap(lambda x: x.lower().split(' ')).map(lambda x: (re.sub("[^a-z0-9]", '', x), 1))
 counts2 = counts.filter(lambda x: len(x) < 20).reduceByKey(lambda a, b: a + b).collect()
 
 # Print spark time
