@@ -41,5 +41,9 @@ cur.execute('''CREATE TABLE zipcode_filename (filename TEXT,
 cur.execute('''CREATE TABLE phone_filename (filename TEXT,
                                phone TEXT);''')
 
+cur.execute('''CREATE TABLE from_to_counts (email_from TEXT,
+                               email_to TEXT,
+                               count int);''')
+
 conn.commit()
 conn.close()

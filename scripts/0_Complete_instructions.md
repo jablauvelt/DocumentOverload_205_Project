@@ -17,3 +17,12 @@ In 2_networks folder:
 1. Follow instructions in 1_setup_mongodb.md
 2. `python 2_networks/2_import_xml_to_mongo.py`
 3. `python 2_networks/3_summarize_and_upload_to_postgres.py`
+
+In 3_distributed_analyses folder:
+1. Follow instructions in 1_setup_emr.md
+
+In 4_sentiment_analysis folder:
+1. Follow instructions in 1_setup_cluster.md
+
+In 5_geocode folder:
+1. Follow instructions in 1_setup_kafka.md
