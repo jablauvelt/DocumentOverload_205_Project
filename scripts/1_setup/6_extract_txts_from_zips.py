@@ -1,7 +1,7 @@
 # Extract to /enron/staging directory (next script will read from /enron/staging and write to /enron_output; hence, less I/O on a single mount)
 # To run : $ python 6_extract_txts_from_zips.py
 # Monitor progress with  $ find /enron/staging | wc -l
-# Takes ~5 minutes to run
+# Takes ~10 minutes to run
 # The final product should have ~1,720,792 files
 
 import os
