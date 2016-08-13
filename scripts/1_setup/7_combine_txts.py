@@ -1,7 +1,7 @@
 # Aggregates all email text files into a single 11Gb file
 # Monitor file size while generating from the command line using: du -hs /enron_output/enron_emails_text_all.txt
 # Appoximate time to generate is 30 minutes using a m3.medium host
-# I/O waits are clearly the most significant issue with this script; hence, use buffering, read from one mount, write to other mount
+# I/O waits are clearly the most significant issue with this script; hence, buffer, read from /enron, write to /enron_output
 
 import os
 counter = 0
