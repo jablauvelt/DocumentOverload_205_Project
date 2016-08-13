@@ -40,6 +40,6 @@
   - $ mount -t ext4 /dev/xvd_ /enron
   - $ mount -t ext4 /dev/xvd_ /enron_output
 - Create a "staging" directory in /enron_output
-  - $ mkdir /enron_output/staging
+  - $ mkdir /enron/staging
 
 
