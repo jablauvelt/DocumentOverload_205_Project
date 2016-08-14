@@ -40,53 +40,41 @@ tb = Blobber(analyzer=NaiveBayesAnalyzer())
 counter = 0
 counter_print = 0
 
-paths = (
-	'/enron_output/text_007/',
-	'/enron_output/text_006/',
-	'/enron_output/text_005/',
-	'/enron_output/text_004/',
-	'/enron_output/text_003/',
-	'/enron_output/text_002/',
-	'/enron_output/text_001/',
-	'/enron_output/text_000/'
-	)
+for root, directories, filenames in os.walk('/enron/staging'):
+	sc.parallelize(filenames, 8)
 
-for path in paths:
-	for root, directories, filenames in os.walk(path):
-		sc.parallelize(filenames, 8)
+	for f in filenames:
+		file_be_processed = 'file:' + root + '/' + f
+		files = sc.wholeTextFiles(file_be_processed)
 
-		for f in filenames:
-			file_be_processed = "file:" + root + f
-			files = sc.wholeTextFiles(file_be_processed)
+		counter = counter + 1
+		counter_print = counter_print + 1
 
-			counter = counter + 1
-			counter_print = counter_print + 1
+		if counter_print > 100:
+			counter_print = 0
+			print("Directory: " + root + ", Number of files analyzed: " + str(counter))
 
-			if counter_print > 100:
-				counter_print = 0
-				print("Directory: " + root + ", Number of files analyzed: " + str(counter))
+		for (filename, content) in files.collect():
+			try:
+				file = open(filename[filename.find('/'):])
+				message = email.message_from_file(file)
+				email_body = message.get_payload()
+				file.close()
 
-			for (filename, content) in files.collect():
-				try:
-					file = open(filename[filename.find('/'):])
-					message = email.message_from_file(file)
-					email_body = message.get_payload()
-					file.close()
+				sentiment = tb(text_preprocessor(email_body))
+				classification = sentiment.sentiment.classification
+				p_pos = sentiment.sentiment.p_pos
+				p_neg = sentiment.sentiment.p_neg
+				fName = filename.split('/')[3]
 
-					sentiment = tb(text_preprocessor(email_body))
-					classification = sentiment.sentiment.classification
-					p_pos = sentiment.sentiment.p_pos
-					p_neg = sentiment.sentiment.p_neg
-					fName = filename.split('/')[3]
+				cur.execute("INSERT INTO machine_learning (filename,probability_positive,probability_negative,conclusion) \
+					VALUES (%s,%s,%s,%s)", (fName, p_pos, p_neg, classification));
 
-					cur.execute("INSERT INTO machine_learning (filename,probability_positive,probability_negative,conclusion) \
-						VALUES (%s,%s,%s,%s)", (fName, p_pos, p_neg, classification));
-
-				except:
-					print("Data Errors:")
-					print("FILENAME: " + filename)
-					print("SYSTEM ERROR: ", sys.exc_info()[0])
-					conn.rollback()
+			except:
+				print("Data Errors:")
+				print("FILENAME: " + filename)
+				print("SYSTEM ERROR: ", sys.exc_info()[0])
+				conn.rollback()
 
 conn.commit()
 conn.close()
