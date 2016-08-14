@@ -1,4 +1,5 @@
 ### Document Overload
+### Make sure to start postgres first (bash: /data/start_postgres.sh)
 ### Takes about 30 minutes on m3.medium
 import sys
 import datetime
