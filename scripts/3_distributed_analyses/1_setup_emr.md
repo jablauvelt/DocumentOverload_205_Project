@@ -18,6 +18,6 @@ This file will walk you through the steps necessary to create an EMR cluster, wh
 14. Run the scripts 2_parse_zips_and_phones.py and 3_wordcount.py in bash as follows: 
   1. `spark-submit 2_parse_zips_and_phones.py`
   2. `spark-submit 3_wordcount.py`
-15. Output wordcount.csv to S3 for wordcloud creation: aws s3 cp wordcount.csv s3://docoverload/wordcount.csv 
+15. Output wordcount.csv to S3 for wordcloud creation: `aws s3 cp wordcount.csv s3://docoverload/wordcount.csv` 
 16. Close the cluster when you're done or your wallet will be very sorry.
 
