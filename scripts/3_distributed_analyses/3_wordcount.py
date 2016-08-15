@@ -1,48 +1,31 @@
 ### Dealing With Document Overload
-### 4_wordcount.py
+### 3_wordcount.py
 ### Purpose: Count words in emails
-### Takes about 20 minutes on a cluster with 1 master and 3 worker nodes, all m3.xlarge
+### Takes about 15 minutes on a cluster with 1 master and 3 worker nodes, all m3.xlarge
 
+
+from operator import add
 from pyspark import SparkContext
-import os
 import re
-import datetime
-import csv
 
-sc = SparkContext(appName="EnronEmailTextFiles")
-sc.setLogLevel("WARN")
+sc = SparkContext(appName="PythonWordCount")
 
-# Print start time
-start_time = datetime.datetime.now()
-print 'Start time:'
-print start_time
+lines = sc.textFile('s3://docoverload12/enron_emails_text_all.txt')
 
-# Combined text file from s3
-files = sc.textFile('s3://docoverload/enron_emails_text_all.txt')
+counts = lines.flatMap(lambda x: x.split(' ')).map(lambda x: (x, 1)).reduceByKey(add)
 
-counts = files.flatMap(lambda x: x.lower().split(' ')).map(lambda x: (re.sub("[^a-z0-9]", '', x), 1))
-counts2 = counts.filter(lambda x: len(x) < 20).reduceByKey(lambda a, b: a + b).collect()
+output = counts.collect()
 
-# Print spark time
-print 'Time Spark portion finished:'
-print str((datetime.datetime.now() - start_time).seconds * 1.0 / 3600) + ' hours'
+outfile = open('/home/ec2-user/wordcounts2.csv', 'w')
 
+for (word, count) in output:
 
-# Export wrods to text file
-print 'Saving words to file:'
-with open('/tmp/wordcounts.csv', 'w') as fl:
-	writer = csv.writer(fl)
-	for i in counts2:
-		writer.writerow(i)
+	clean_word =  word.encode('utf-8')[:30].replace(" ", "").replace("\t", "").replace("\n", "")
 
-# Copy files to AWS S3
-os.system("aws s3 cp /tmp/wordcounts.csv s3://docoverload")
-print 'File copied to S3 as wordcounts.csv'
+	if re.match("[\w]+$", clean_word):
+		outfile.write("%s, %i" % (clean_word, count))
+		outfile.write("\n")
 
-# Print end time
-end_time = datetime.datetime.now()
-print 'End time:'
-print end_time
-print 'Total time elapsed: ' + str((end_time - start_time).seconds * 1.0 / 3600) + ' hours'
+outfile.close()
 
 sc.stop()
