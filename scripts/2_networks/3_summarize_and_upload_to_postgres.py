@@ -49,17 +49,17 @@ conn.commit()
 for fr in froms:
 	try:
 		cur.execute("insert into email_from (filename, email_from) values ('" + \
-                     fr['_id'] + "', '" + re.sub("'", '', fr['#From']) + "')")
+                     fr['_id'] + "', substring('" + re.sub("'", '', fr['#From']) + "' from 1 for 50))")
 	except:
 		print(sys.exc_info()[0])
 		print fr
-	
+
 # Insert email_tos
 for to in tos:
         try:
 		for t in to['#To'].split(','):
 	                cur.execute("insert into email_to (filename, email_to) values ('" + \
-        	             to['_id'] + "', '" + re.sub("'", '', t) + "')")
+        	             to['_id'] + "', substring('" + re.sub("'", '', t) + "' from 1 for 50))")
         except:
                 print(sys.exc_info()[0])
 		print to
@@ -69,8 +69,7 @@ print 'Files uploaded to PostGres'
 end_time = datetime.datetime.now()
 print 'End time:'
 print end_time
-print 'Total time elapsed: ' + str((end_time - start_time).seconds * 1.0 / 3600) + ' hours'	
+print 'Total time elapsed: ' + str((end_time - start_time).seconds * 1.0 / 3600) + ' hours'
 
 conn.commit()
 conn.close()
-
