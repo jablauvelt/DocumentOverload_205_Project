@@ -50,9 +50,11 @@ sudo /usr/bin/easy_install-2.7 pip
 # Install python packages
 pip install psycopg2
 pip install pymongo
+pip install xmltodict
 
-# Pull in scripts from GitHub Repository (this one), so you can run scripts from the command line
+# Pull in scripts from GitHub Repository (this one), so you can run scripts from the command line.
+# You will need to replace "your_username" with your git username and enter your password.
 cd /home/w205
-git clone https://jablauvelt@github.com/jablauvelt/DocumentOverload_205_Project.git
+git clone https://your_username@github.com/jablauvelt/DocumentOverload_205_Project.git
 cd DocumentOverload_205_Project/scripts
 
