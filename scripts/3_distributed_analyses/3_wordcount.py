@@ -1,31 +1,48 @@
 ### Dealing With Document Overload
-### 3_wordcount.py
+### 4_wordcount.py
 ### Purpose: Count words in emails
-### Takes about 15 minutes on a cluster with 1 master and 3 worker nodes, all m3.xlarge
+### Takes about 20 minutes on a cluster with 1 master and 3 worker nodes, all m3.xlarge
 
-
-from operator import add
 from pyspark import SparkContext
+import os
 import re
+import datetime
+import csv
 
-sc = SparkContext(appName="PythonWordCount")
+sc = SparkContext(appName="EnronEmailTextFiles")
+sc.setLogLevel("WARN")
 
-lines = sc.textFile('s3://docoverload12/enron_emails_text_all.txt')
+# Print start time
+start_time = datetime.datetime.now()
+print 'Start time:'
+print start_time
 
-counts = lines.flatMap(lambda x: x.split(' ')).map(lambda x: (x, 1)).reduceByKey(add)
+# Combined text file from s3
+files = sc.textFile('s3://docoverload/enron_emails_text_all.txt')
 
-output = counts.collect()
+counts = files.flatMap(lambda x: x.lower().split(' ')).map(lambda x: (re.sub("[^a-z0-9 ]", '', x), 1))
+counts2 = counts.filter(lambda x: len(x) < 20).reduceByKey(lambda a, b: a + b).collect()
 
-outfile = open('/home/ec2-user/wordcounts2.csv', 'w')
+# Print spark time
+print 'Time Spark portion finished:'
+print str((datetime.datetime.now() - start_time).seconds * 1.0 / 3600) + ' hours'
 
-for (word, count) in output:
 
-	clean_word =  word.encode('utf-8')[:30].replace(" ", "").replace("\t", "").replace("\n", "")
+# Export wrods to text file
+print 'Saving words to file:'
+with open('/tmp/wordcounts.csv', 'w') as fl:
+	writer = csv.writer(fl)
+	for i in counts2:
+		writer.writerow(i)
 
-	if re.match("[\w]+$", clean_word):
-		outfile.write("%s, %i" % (clean_word, count))
-		outfile.write("\n")
+# Copy files to AWS S3
+os.system("aws s3 cp /tmp/wordcounts.csv s3://docoverload")
+print 'File copied to S3 as wordcounts.csv'
 
-outfile.close()
+# Print end time
+end_time = datetime.datetime.now()
+print 'End time:'
+print end_time
+print 'Total time elapsed: ' + str((end_time - start_time).seconds * 1.0 / 3600) + ' hours'
 
 sc.stop()
