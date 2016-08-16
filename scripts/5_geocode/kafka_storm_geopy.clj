@@ -17,7 +17,7 @@
           {"kafka-spout" :shuffle}
           "bolts.kafka_storm_geopy_bolt.GeopyBolt"
           ["zipcode"]
-          :p 5
+          :p 1
           )
     }
   ]

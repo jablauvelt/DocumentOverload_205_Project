@@ -5,6 +5,7 @@ from streamparse.bolt import Bolt
 from geopy.geocoders import Nominatim
 import psycopg2
 import sys
+import time
 
 class GeopyBolt(Bolt):
 
@@ -41,3 +42,5 @@ class GeopyBolt(Bolt):
 			cur.execute("update zipcode_filename set longitude=%s, latitude=%s where zipcode=%s", ('na', 'na', zipcode))
 			conn.commit()
 			conn.close()
+
+		time.sleep(60)
