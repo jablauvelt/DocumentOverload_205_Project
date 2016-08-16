@@ -1,7 +1,7 @@
 # Approximate run time of 11 minutes to insert 2,680,000 records into Postgres, 30% CPU usage on m3.medium instance
 # On the cluster, execute the following to persistently store the file in S3:	cp /home/ec2-user/wordcounts2.csv s3://docoverload
 # github.com/RaRe-Technologies/smart_open
-# Get yer pip on:	pip install smart_open
+
 
 import psycopg2
 import smart_open
