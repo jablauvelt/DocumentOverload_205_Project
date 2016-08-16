@@ -1,6 +1,7 @@
 # spark-submit emailrank_2of2.py
 # run this on cluster, if spark isn't installed on your instance
 # grab file from s3 first: aws s3 cp s3://docoverload/enron_emails_to_from.txt /root/enron_emails_to_from.txt
+# WHEN DONE, output file back to s3: aws s3 cp /root/enron_emails_ranks.txt s3://docoverload/enron_emails_ranks.txt
 
 from operator import add
 from pyspark import SparkContext
