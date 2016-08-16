@@ -1,6 +1,6 @@
 # Generates a file of to and from emails from the postgres database to be ranked
 # Approximate runtime of 5 minutes on m3.medium host to generate a file of 300Mb
-# aws s3 cp /root/enron_emails_to_from.txt s3://docoverload12
+# Copy to S3 to get yer cluster on:  aws s3 cp /root/enron_emails_to_from.txt s3://docoverload12
 
 import psycopg2
 
@@ -9,6 +9,7 @@ cur = conn.cursor()
 
 cur.execute("create index idx_email_to_filename on email_to (filename)")
 
+# write to EBS because EBS be super-fast (as compared to S3)
 outfile = open('/root/enron_emails_to_from.txt', 'w')
 
 cur.execute("select filename, email_from from email_from")
