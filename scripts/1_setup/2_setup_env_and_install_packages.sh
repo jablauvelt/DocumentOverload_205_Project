@@ -51,6 +51,7 @@ sudo /usr/bin/easy_install-2.7 pip
 pip install psycopg2
 pip install pymongo
 pip install xmltodict
+pip install smart_open
 
 # Pull in scripts from GitHub Repository (this one), so you can run scripts from the command line.
 # You will need to replace "your_username" with your git username and enter your password.
