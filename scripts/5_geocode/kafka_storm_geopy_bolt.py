@@ -43,4 +43,6 @@ class GeopyBolt(Bolt):
 			conn.commit()
 			conn.close()
 
+		# GeoPY will rate limit our connection if we send too many requests for information; hence, we delay our requests so as
+		# not to abuse this free service, free is friendly!
 		time.sleep(60)
