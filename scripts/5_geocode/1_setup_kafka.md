@@ -28,3 +28,5 @@
 -
 4) Please be sure to install geopy:  pip install geopy
 -
+5) Please be sure to install kakfka:  pip install kafka
+-
