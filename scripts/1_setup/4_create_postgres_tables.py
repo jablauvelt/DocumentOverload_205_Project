@@ -26,11 +26,8 @@ cur.execute('''CREATE TABLE email_subject (filename TEXT,
 cur.execute('''CREATE TABLE email_date (filename TEXT,
                                email_date TEXT);''')
 
-cur.execute('''CREATE TABLE email_sdoc (filename TEXT,
-                               email_sdoc TEXT);''')
-
-cur.execute('''CREATE TABLE email_zlid (filename TEXT,
-                               email_zlid TEXT);''')
+cur.execute('''CREATE TABLE email_rank (email TEXT,
+                               rank REAL);''')
 
 cur.execute('''CREATE TABLE zipcode_filename (filename TEXT,
                                zipcode TEXT,
