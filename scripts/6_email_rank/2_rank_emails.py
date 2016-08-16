@@ -1,5 +1,6 @@
 # spark-submit emailrank_2of2.py
-# only takes one minute on a m3.medium host
+# run this on cluster, if spark isn't installed on your instance
+# grab file from s3 first: aws s3 cp s3://docoverload/enron_emails_to_from.txt /home/ec2-user/enron_emails_to_from.txt
 
 from operator import add
 from pyspark import SparkContext
