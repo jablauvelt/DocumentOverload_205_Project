@@ -1,4 +1,4 @@
-# spark-submit /home/ec2-user/2_rank_emails.py
+# spark-submit /home/ec2-user/3_rank_emails.py
 # please run this on a cluster
 # Edit the s3 bucket to match your output bucket
 # WHEN DONE, output file back to s3: aws s3 cp /home/ec2-user/enron_emails_ranks.txt s3://docoverload/enron_emails_ranks.txt
