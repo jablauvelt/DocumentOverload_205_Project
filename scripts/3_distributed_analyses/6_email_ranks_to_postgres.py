@@ -1,7 +1,9 @@
 # Run time is less than a minute on a m3.medium host
-# Grab file from s3 first: aws s3 cp s3://docoverload/enron_emails_ranks.txt /root/enron_emails_ranks.txt
+# select * from email_rank order by rank desc;
+# Kenneth Lay (CEO) and Jeffery Skilling (CFO) at the top of the email ranking list!  Exactly Right!
 
 import psycopg2
+import smart_open
 
 counter = 0
 
@@ -11,9 +13,7 @@ cur = conn.cursor()
 cur.execute("delete from email_rank")
 conn.commit()
 
-infile = open('/root/enron_emails_ranks.txt', 'r')
-
-for line in infile:
+for line in smart_open.smart_open('s3://docoverload12/enron_emails_ranks.txt'):
 
 	counter = counter + 1
 	if counter % 1000 == 0:
