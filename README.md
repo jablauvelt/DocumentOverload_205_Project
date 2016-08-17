@@ -7,10 +7,8 @@
 - Megan Pera
 - Frank Xie
 
-
 Report: https://docs.google.com/document/d/1lz-9Zht4PvDyxzr4HAhtJZ3Ipeb-VhzX15mwTBmdQtI/edit?usp=sharing
 
 Presentation: https://docs.google.com/presentation/d/1dG3u9eeIj7jly9If5fYVmH6Q0RF3qcejaTsO2RgjcVg/edit
 
-Timeline: https://docs.google.com/spreadsheets/d/1-lsBDCXSKEkHi6PlHM_M0VLHyH3oDrfgAbmjjCxUmdI/edit?usp=sharing
-
+To run the project: Follow instructions in 0_Complete_instructions within the scripts folder
