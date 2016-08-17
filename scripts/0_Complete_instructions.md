@@ -26,3 +26,6 @@ In 4_sentiment_analysis folder:
 
 In 5_geocode folder:
 1. Follow instructions in 1_setup_kafka.md
+
+In 6_wordcloud folder:
+1. Follow instructions in 1_create_wordcloud.md
