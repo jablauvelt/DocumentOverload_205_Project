@@ -1,7 +1,6 @@
 # Generates a file of to and from emails from the postgres database to be ranked
 # Approximate runtime of 5 minutes on m3.medium host to generate a file of 300Mb
-# Run this on your single instance, before setting up and executing the cluster analyses
-# When complete: aws s3 cp /root/enron_emails_to_from.txt s3://docoverload
+# aws s3 cp /root/enron_emails_to_from.txt s3://docoverload12
 
 import psycopg2
 
