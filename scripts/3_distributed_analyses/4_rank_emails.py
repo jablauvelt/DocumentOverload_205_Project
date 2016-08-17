@@ -1,8 +1,8 @@
-# spark-submit 4_rank_emails.py
-# run this on cluster, if spark isn't installed on your instance
-# Takes < 1 min on cluster
-# grab file from s3 first: aws s3 cp s3://docoverload/enron_emails_to_from.txt /root/enron_emails_to_from.txt
-# WHEN DONE, output file back to s3: aws s3 cp /root/enron_emails_ranks.txt s3://docoverload/enron_emails_ranks.txt
+# spark-submit /home/ec2-user/2_rank_emails.py
+# please run this on a cluster
+# Edit the s3 bucket to match your output bucket
+# WHEN DONE, output file back to s3: aws s3 cp /home/ec2-user/enron_emails_ranks.txt s3://docoverload/enron_emails_ranks.txt
+# You may need to use AWS configure, if your cluster is not already configured for AWS CLI
 
 from operator import add
 from pyspark import SparkContext
@@ -28,7 +28,8 @@ if __name__ == "__main__":
 
 	sc = SparkContext(appName="PythonEmailRank")
 
-	lines = sc.textFile('file:///root/enron_emails_to_from.txt', 1)
+    # read file from S3
+	lines = sc.textFile('s3://docoverload12/enron_emails_to_from.txt')
 
 	# Load all EMAILs input file and initialize EMAIL pairs
 	links = lines.map(lambda emails: parseNeighbors(emails)).distinct().groupByKey().cache()
@@ -46,7 +47,8 @@ if __name__ == "__main__":
 		ranks = contribs.reduceByKey(add).mapValues(lambda rank: rank * 0.85 + 0.15)
 
 	# Collects all EMAIL ranks and dumps them to csv file
-	outfile = open('/root/enron_emails_ranks.txt', 'w')
+	# Write to EBS as this is much faster than S3, then upload to S3 after processing complete, GO FAST, CLUSTER EXPENSIVE, TERMINATE!
+	outfile = open('/home/ec2-user/enron_emails_ranks.txt', 'w')
 	for (email, rank) in ranks.collect():
 		outfile.write("%s,%s\n" % (email, rank))
 	outfile.close()
