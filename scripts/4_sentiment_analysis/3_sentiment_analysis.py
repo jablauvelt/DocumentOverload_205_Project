@@ -1,5 +1,4 @@
 # /home/w205/spark15/bin/spark-submit 3_sentiment_analysis.py
-# WHEN DONE, output file back to s3: aws s3 cp /home/ec2-user/sentiment_test.csv s3://docoverload/sentiment_test.csv
 
 from __future__ import print_function
 import sys
