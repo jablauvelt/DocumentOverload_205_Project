@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 import sys
+import psycopg2
 import re
 import email
 import os
@@ -30,46 +31,51 @@ def text_preprocessor(s):
 sc = SparkContext(appName="EnronEmailTextFiles")
 sc.setLogLevel("WARN")
 
+conn = psycopg2.connect(database="finalproject", user="postgres", password="pass", host="localhost", port="5432")
+cur = conn.cursor()
+cur.execute("delete from machine_learning")
+
 tb = Blobber(analyzer=NaiveBayesAnalyzer())
 
 counter = 0
 counter_print = 0
 
-outfile = open('/home/ec2-user/sentiment_test.csv', 'w')
-
 for root, directories, filenames in os.walk('/enron/staging'):
-        sc.parallelize(filenames, 8)
+	sc.parallelize(filenames, 8)
 
-        for f in filenames:
-                file_be_processed = 'file:' + root + '/' + f
-                files = sc.wholeTextFiles(file_be_processed)
+	for f in filenames:
+		file_be_processed = 'file:' + root + '/' + f
+		files = sc.wholeTextFiles(file_be_processed)
 
-                counter = counter + 1
-                counter_print = counter_print + 1
+		counter = counter + 1
+		counter_print = counter_print + 1
 
-                if counter_print > 100:
-                        counter_print = 0
-                        print("Directory: " + root + ", Number of files analyzed: " + str(counter))
+		if counter_print > 100:
+			counter_print = 0
+			print("Directory: " + root + ", Number of files analyzed: " + str(counter))
 
-                for (filename, content) in files.collect():
-                        try:
-                                file = open(filename[filename.find('/'):])
-                                message = email.message_from_file(file)
-                                email_body = message.get_payload()
-                                file.close()
+		for (filename, content) in files.collect():
+			try:
+				file = open(filename[filename.find('/'):])
+				message = email.message_from_file(file)
+				email_body = message.get_payload()
+				file.close()
 
-                                sentiment = tb(text_preprocessor(email_body))
-                                classification = sentiment.sentiment.classification
-                                p_pos = sentiment.sentiment.p_pos
-                                p_neg = sentiment.sentiment.p_neg
-                                fName = filename.split('/')[3]
+				sentiment = tb(text_preprocessor(email_body))
+				classification = sentiment.sentiment.classification
+				p_pos = sentiment.sentiment.p_pos
+				p_neg = sentiment.sentiment.p_neg
+				fName = filename.split('/')[3]
 
-                                outfile.write("%s,%s,%s,%s\n" % (fName, str(p_pos), str(p_neg), classification))
+				cur.execute("INSERT INTO machine_learning (filename,probability_positive,probability_negative,conclusion) \
+					VALUES (%s,%s,%s,%s)", (fName, p_pos, p_neg, classification));
 
-                        except:
-                                print("Data Errors:")
-                                print("FILENAME: " + filename)
-                                print("SYSTEM ERROR: ", sys.exc_info())
+			except:
+				print("Data Errors:")
+				print("FILENAME: " + filename)
+				print("SYSTEM ERROR: ", sys.exc_info()[0])
+				conn.rollback()
 
-outfile.close()
+conn.commit()
+conn.close()
 sc.stop()
